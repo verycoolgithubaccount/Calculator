@@ -4,10 +4,12 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        var matrix = CalculatorLibrary.IO.PromptForMatrix("Enter matrix: ");
+        var matrix1 = CalculatorLibrary.IO.PromptForMatrix("Enter matrix: ");
+        var matrix2 = CalculatorLibrary.IO.PromptForMatrix("Enter matrix: ");
 
-        CalculatorLibrary.Matrix.PrintMatrix(ref matrix);
+        var sum = CalculatorLibrary.Matrix.AddMatrix(ref matrix1, ref matrix2);
 
-        Console.WriteLine(CalculatorLibrary.Matrix.GetDeterminant(ref matrix));
+        CalculatorLibrary.Matrix.PrintMatrix(ref sum);
+        Console.WriteLine();
     }
 }

@@ -70,5 +70,46 @@ namespace CalculatorLibrary
                 currentRow++;
             }
         }
+
+        public static List<List<decimal>> ScalarMultiply(ref List<List<decimal>> matrix, int scalar)
+        {
+            List<List<decimal>> output = new();
+
+            foreach (List<decimal> row in matrix)
+            {
+                List<decimal> outputRow = new();
+                foreach (decimal item in row)
+                {
+                    outputRow.Add(item * scalar);
+                }
+                output.Add(outputRow);
+            }
+            return output;
+        }
+
+        public static List<List<decimal>> AddMatrix(ref List<List<decimal>> matrix1, ref List<List<decimal>> matrix2, bool subtract = false)
+        {
+            int rowCount = matrix1.Count;
+            int columnCount = matrix1.ElementAt(0).Count;
+
+            if (rowCount != matrix2.Count || columnCount != matrix2.ElementAt(0).Count) { throw new ArgumentException("Matrices must have equal dimensions!"); }
+
+            List<List<decimal>> output = new();
+
+            for (int i = 0; i < rowCount; i++)
+            {
+                List<decimal> outputRow = new();
+                for (int j = 0; j < columnCount; j++)
+                {
+                    if (subtract)
+                    {
+                        outputRow.Add(matrix1.ElementAt(i).ElementAt(j) - matrix2.ElementAt(i).ElementAt(j));
+                    } 
+                    else outputRow.Add(matrix1.ElementAt(i).ElementAt(j) + matrix2.ElementAt(i).ElementAt(j));
+                }
+                output.Add(outputRow);
+            }
+            return output;
+        }
     }
 }
