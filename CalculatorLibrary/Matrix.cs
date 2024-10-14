@@ -111,5 +111,53 @@ namespace CalculatorLibrary
             }
             return output;
         }
+
+        public static List<List<decimal>> Transpose(ref List<List<decimal>> matrix)
+        {
+            int rowCount = matrix.Count;
+            int columnCount = matrix.ElementAt(0).Count;
+
+            List<List<decimal>> output = new();
+
+            for (int i = 0; i < columnCount; i++)
+            {
+                List<decimal> outputRow = new();
+                foreach (List<decimal> row in matrix)
+                {
+                    outputRow.Add(row.ElementAt(i));
+                }
+                output.Add(outputRow);
+            }
+            return output;
+        }
+
+        public static List<List<decimal>> MultiplyMatrix(ref List<List<decimal>> matrix1, ref List<List<decimal>> matrix2)
+        {
+            int rowCount1 = matrix1.Count;
+            int columnCount1 = matrix1.ElementAt(0).Count;
+
+            int rowCount2 = matrix2.Count;
+            int columnCount2 = matrix2.ElementAt(0).Count;
+
+            if (columnCount1 != rowCount2) { throw new ArgumentException("Matrix 1's columns and Matrix 2's columns must be equal!"); }
+
+            List<List<decimal>> output = new();
+
+            for (int i = 0; i < rowCount1; i++)
+            {
+                List<decimal> outputRow = new();
+                for (int j = 0; j < columnCount2; j++)
+                {
+                    decimal item = 0;
+                    for (int k = 0; k < columnCount1; k++)
+                    {
+                        item += (matrix1.ElementAt(i).ElementAt(k) * matrix2.ElementAt(k).ElementAt(j));
+                    }
+                    outputRow.Add(item);
+                }
+                output.Add(outputRow);
+            }
+            return output;
+        }
     }
 }

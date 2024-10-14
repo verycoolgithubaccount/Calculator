@@ -7,9 +7,10 @@ internal class Program
         var matrix1 = CalculatorLibrary.IO.PromptForMatrix("Enter matrix: ");
         var matrix2 = CalculatorLibrary.IO.PromptForMatrix("Enter matrix: ");
 
-        var sum = CalculatorLibrary.Matrix.AddMatrix(ref matrix1, ref matrix2);
+        var result = CalculatorLibrary.Matrix.MultiplyMatrix(ref matrix1, ref matrix2);
 
-        CalculatorLibrary.Matrix.PrintMatrix(ref sum);
+        CalculatorLibrary.Matrix.PrintMatrix(ref result);
+
         Console.WriteLine();
     }
 }
