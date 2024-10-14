@@ -35,7 +35,7 @@ namespace CalculatorLibrary
 
             if (rowCount != columnCount) { throw new ArgumentException("Must be a square matrix!"); }
 
-            if (rowCount == 1) { throw new ArgumentException("Matrix has only one row and column!"); }
+            if (rowCount == 1) { return matrix; }
 
             List<List<decimal>> minorMatrix = new();
 
@@ -71,7 +71,7 @@ namespace CalculatorLibrary
             }
         }
 
-        public static List<List<decimal>> ScalarMultiply(ref List<List<decimal>> matrix, int scalar)
+        public static List<List<decimal>> ScalarMultiply(ref List<List<decimal>> matrix, decimal scalar)
         {
             List<List<decimal>> output = new();
 
@@ -157,6 +157,48 @@ namespace CalculatorLibrary
                 }
                 output.Add(outputRow);
             }
+            return output;
+        }
+
+        public static List<List<decimal>> MatrixOfCofactors(ref List<List<decimal>> matrix)
+        {
+            int rowCount = matrix.Count;
+            int columnCount = matrix.ElementAt(0).Count;
+
+            if (rowCount != columnCount) { throw new ArgumentException("Must be a square matrix!"); }
+
+            List<List<decimal>> output = new();
+
+            for (int i = 0; i < rowCount; i++)
+            {
+                List<decimal> outputRow = new();
+                for (int j = 0; j < columnCount; j++)
+                {
+                    List<List<decimal>> minor = GetMinor(ref matrix, i, j);
+                    outputRow.Add((decimal) Math.Pow(-1, (i + j + 2)) * GetDeterminant(ref minor));
+                }
+                output.Add(outputRow);
+            }
+            return output;
+        }
+
+        public static List<List<decimal>> Inverse(ref List<List<decimal>> matrix)
+        {
+            int rowCount = matrix.Count;
+            int columnCount = matrix.ElementAt(0).Count;
+
+            if (rowCount != columnCount) { throw new ArgumentException("Must be a square matrix!"); }
+
+            decimal determinant = GetDeterminant(ref matrix);
+
+            if (determinant == 0) { throw new ArgumentException("Determinant is 0!"); }
+
+            List<List<decimal>> output = new();
+
+            output = MatrixOfCofactors(ref matrix);
+            output = Transpose(ref output);
+            output = ScalarMultiply(ref output, (1 / determinant));
+
             return output;
         }
     }
