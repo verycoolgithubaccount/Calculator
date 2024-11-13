@@ -71,6 +71,21 @@ namespace CalculatorLibrary
             }
         }
 
+        public static void PrintStringMatrix(ref List<List<string>> matrix)
+        {
+            int currentRow = 1;
+            foreach (List<string> row in matrix)
+            {
+                string rowText = "Row " + currentRow + ":   ";
+                foreach (string item in row)
+                {
+                    rowText += item + ",  ";
+                }
+                Console.WriteLine(rowText);
+                currentRow++;
+            }
+        }
+
         public static List<List<decimal>> ScalarMultiply(ref List<List<decimal>> matrix, decimal scalar)
         {
             List<List<decimal>> output = new();
@@ -199,6 +214,73 @@ namespace CalculatorLibrary
             output = Transpose(ref output);
             output = ScalarMultiply(ref output, (1 / determinant));
 
+            return output;
+        }
+
+        public static List<List<decimal>> Cramer(ref List<List<decimal>> matrix, ref List<List<decimal>> solutions)
+        {
+            int rowCountM = matrix.Count;
+            int columnCountM = matrix.ElementAt(0).Count;
+
+            int rowCountS = solutions.Count;
+            int columnCountS = solutions.ElementAt(0).Count;
+
+            if (rowCountM != columnCountM) { throw new ArgumentException("Must be a square matrix!"); }
+            if (rowCountM != rowCountS) { throw new ArgumentException("Matrices must have same number of rows!"); }
+            if (columnCountS != 1) { throw new ArgumentException("Solution matrix must have only one column!"); }
+
+            decimal determinant = GetDeterminant(ref matrix);
+
+            if (determinant == 0) { throw new ArgumentException("Determinant is 0!"); }
+
+            List<List<decimal>> output = new();
+
+            for (int i = 0; i < columnCountM; i++)
+            {
+                List<decimal> row = new();
+                List<List<decimal>> tempMatrix = new();
+
+                foreach(List<decimal> copyingRow in matrix)
+                {
+                    List<decimal> copiedRow = new();
+                    foreach(decimal copyingColumn in copyingRow) copiedRow.Add(copyingColumn);
+                    tempMatrix.Add(copiedRow);
+                }
+
+                for (int j = 0; j < rowCountM; j++)
+                {
+                    tempMatrix.ElementAt(j)[i] = solutions.ElementAt(j).ElementAt(0);
+                }
+
+                decimal dx = GetDeterminant(ref tempMatrix);
+
+                row.Add(dx / determinant);
+                output.Add(row);
+            }
+
+            return output;
+        }
+
+        public static List<List<string>> Compare(ref List<List<decimal>> matrix1, ref List<List<string>> matrix2)
+        {
+            if (matrix1.Count != matrix2.Count || matrix1.ElementAt(0).Count != matrix2.ElementAt(0).Count) throw new ArgumentException("Matrices must have the same dimensions!");
+
+            List<List<string>> output = new();
+
+            for (int i = 0; i < matrix1.Count; i++)
+            {
+                List<string> row = new();
+                for (int j = 0; j < matrix1.ElementAt(0).Count; j++)
+                {
+                    string[] numAndDom = matrix2.ElementAt(i)[j].Split('/');
+                    decimal num = decimal.Parse(numAndDom[0]);
+                    decimal dom = (numAndDom.Length > 1) ? decimal.Parse(numAndDom[1]) : 1;
+
+                    if (num / dom == matrix1.ElementAt(i)[j]) row.Add("_");
+                    else row.Add("X");
+                }
+                output.Add(row);
+            }
             return output;
         }
     }

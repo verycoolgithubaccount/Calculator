@@ -14,14 +14,15 @@
         ///     options is null
         ///     options is empty and withQuit is false
         /// </exception>
-        public static int PromptForMenuSelection(IEnumerable<string> options, bool withQuit)
+        public static int PromptForMenuSelection(IEnumerable<string> options, bool withQuit, string prompt = "Pick an option: ")
         {
+            if (prompt == null) prompt = "Pick an option: ";
             int input = 0;
             bool isInvalid = true;
 
             do
             {
-                Console.WriteLine("Pick an option: ");
+                Console.WriteLine(prompt);
                 Console.WriteLine();
                 int maxOptions = 0;
                 foreach (string option in options)
@@ -523,6 +524,8 @@
                 List<decimal> columns = new();
                 for (int j = 0; j < columnCount; j++)
                 {
+                    Console.WriteLine(prompt);
+                    Console.WriteLine();
                     foreach (string rowText in matrixText)
                     {
                         Console.WriteLine(rowText);
@@ -543,6 +546,53 @@
                 foreach (decimal number in columns)
                 {
                     row += number + ",  ";
+                }
+                matrixText.Add(row);
+
+                matrix.Add(columns);
+            }
+            return matrix;
+        }
+
+        public static List<List<string>> PromptForStringMatrix(string prompt, int rowCount = -1, int columnCount = -1)
+        {
+            if (rowCount < 1) rowCount = CalculatorLibrary.IO.PromptForInt("How many rows? ", 1, int.MaxValue);
+            if (columnCount < 1) columnCount = CalculatorLibrary.IO.PromptForInt("How many columns? ", 1, int.MaxValue);
+
+            Console.Clear();
+
+            List<List<string>> matrix = new();
+            int count = 0;
+
+            List<string> matrixText = new();
+
+            for (int i = 0; i < rowCount; i++)
+            {
+                List<string> columns = new();
+                for (int j = 0; j < columnCount; j++)
+                {
+                    Console.WriteLine(prompt);
+                    Console.WriteLine();
+                    foreach (string rowText in matrixText)
+                    {
+                        Console.WriteLine(rowText);
+                    }
+
+                    string promptForNextItem = "Row " + (i + 1) + ":   ";
+                    if (columns.Count > 0)
+                    {
+                        foreach (string item in columns)
+                        {
+                            promptForNextItem += item + ",  ";
+                        }
+                    }
+                    columns.Add(CalculatorLibrary.IO.PromptForInput(promptForNextItem, false));
+                    Console.Clear();
+                }
+                string row = "Row " + (matrix.Count + 1) + ":   ";
+                foreach (string text in columns)
+                {
+                    row += text + ",  ";
                 }
                 matrixText.Add(row);
 
