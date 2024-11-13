@@ -149,6 +149,20 @@ namespace CalculatorLibrary
                 Numerator = 1;
                 Denominator = 1;
             }
+            if (Denominator > 1000000000000)
+            {
+                Numerator = Numerator / Denominator;
+                Denominator = 1;
+            }
+            try
+            {
+                if ((int) (Numerator * 10000000000) == 0)
+                {
+                    Numerator = 0;
+                    Denominator = 1;
+                }
+            }
+            catch (Exception e) {}
         }
 
         public override string ToString()
@@ -160,7 +174,11 @@ namespace CalculatorLibrary
         public string ToStringDecimal()
         {
             decimal value = (Numerator / Denominator);
-            if ((int)(value * 100000) - ((int)(value * 10000) * 10) > 4) value += (decimal) 0.0001;
+
+            if ((ulong)(Math.Abs(value) * 100000) - ((ulong)(Math.Abs(value) * 10000) * 10) > 4)
+            {
+                value = (value > 0) ? value + (decimal)0.0001 : value - (decimal)0.0001;
+            }
 
             string untruncated = value.ToString();
             string[] outputStrings = untruncated.Split(".");
@@ -187,7 +205,7 @@ namespace CalculatorLibrary
             return base.GetHashCode();
         }
 
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object obj)
         {
             if (obj == null) return false;
             return this == (MathValue)obj;

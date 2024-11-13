@@ -439,19 +439,65 @@
                     Console.WriteLine("Invalid fraction!");
                     continue;
                 }
-                bool isParsed = (decimal.TryParse(strings[0], out numerator) && (strings.Length == 2 ? decimal.TryParse(strings[1], out denominator) : true));
+                bool NumeratorIsParsed = (decimal.TryParse(strings[0], out numerator));
+                bool DenominatorIsParsed = (strings.Length == 2 ? decimal.TryParse(strings[1], out denominator) : true);
 
-                if (!isParsed)
+                if (!DenominatorIsParsed)
                 {
                     Console.WriteLine("Invalid number!");
                     continue;
                 }
-                else if (denominator == 0)
+                if (!NumeratorIsParsed)
+                {
+                    if (strings[0].Contains("sin") || strings[0].Contains("cos") || strings[0].Contains("tan") || strings[0].Contains("sec") || strings[0].Contains("csc") || strings[0].Contains("cot"))
+                    {
+                        NumeratorIsParsed = strings[0].StartsWith("-") ? (decimal.TryParse("-" + strings[0].Substring(4), out numerator)) : (decimal.TryParse(strings[0].Substring(3), out numerator));
+                    }
+                    if (!NumeratorIsParsed)
+                    {
+                        Console.WriteLine("Invalid number!");
+                        continue;
+                    }
+                }
+                
+                if (denominator == 0)
                 {
                     Console.WriteLine("Denominator cannot be 0!");
                     continue;
                 }
-                else if ((numerator / denominator) < min || (numerator / denominator) > max)
+
+                if (strings[0].Contains("sin"))
+                {
+                    numerator = (decimal)Math.Sin((double)((numerator / denominator) * (strings[0].StartsWith("-") ? -1 : 1) * (decimal)(Math.PI / 180)));
+                    denominator = 1;
+                }
+                else if (strings[0].Contains("cos"))
+                {
+                    numerator = (decimal)Math.Cos((double)((numerator / denominator) * (strings[0].StartsWith("-") ? -1 : 1) * (decimal)(Math.PI / 180)));
+                    denominator = 1;
+                }
+                else if (strings[0].Contains("tan"))
+                {
+                    numerator = (decimal)Math.Tan((double)((numerator / denominator) * (strings[0].StartsWith("-") ? -1 : 1) * (decimal)(Math.PI / 180)));
+                    denominator = 1;
+                }
+                else if (strings[0].Contains("sec"))
+                {
+                    numerator = 1 / ((decimal)Math.Cos((double)((numerator / denominator) * (strings[0].StartsWith("-") ? -1 : 1) * (decimal)(Math.PI / 180))));
+                    denominator = 1;
+                }
+                else if (strings[0].Contains("cos"))
+                {
+                    numerator = 1 / ((decimal)Math.Sin((double)((numerator / denominator) * (strings[0].StartsWith("-") ? -1 : 1) * (decimal)(Math.PI / 180))));
+                    denominator = 1;
+                }
+                else if (strings[0].Contains("cot"))
+                {
+                    numerator = 1 / ((decimal)Math.Tan((double) ((numerator / denominator) * (strings[0].StartsWith("-") ? -1 : 1) * (decimal)(Math.PI / 180))));
+                    denominator = 1;
+                }
+
+                if ((numerator / denominator) < min || (numerator / denominator) > max)
                 {
                     Console.WriteLine("Input must be between " + min + " and " + max + "!");
                     continue;
@@ -627,7 +673,7 @@
                     {
                         foreach (MathValue item in columns)
                         {
-                            promptForNextItem += item + ",  ";
+                            promptForNextItem += item.ToStringDecimal() + ",  ";
                         }
                     }
                     columns.Add(CalculatorLibrary.IO.PromptForMathValue(promptForNextItem, decimal.MinValue, decimal.MaxValue));
@@ -636,7 +682,7 @@
                 string row = "Row " + (matrix.Count + 1) + ":   ";
                 foreach (MathValue number in columns)
                 {
-                    row += number + ",  ";
+                    row += number.ToStringDecimal() + ",  ";
                 }
                 matrixText.Add(row);
 
