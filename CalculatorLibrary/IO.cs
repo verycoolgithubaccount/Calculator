@@ -14,9 +14,10 @@
         ///     options is null
         ///     options is empty and withQuit is false
         /// </exception>
-        public static int PromptForMenuSelection(IEnumerable<string> options, bool withQuit, string prompt = "Pick an option: ")
+        public static int PromptForMenuSelection(IEnumerable<string> options, bool withQuit, string prompt = "Pick an option: ", string quitMessage = "Quit")
         {
             if (prompt == null) prompt = "Pick an option: ";
+            if (prompt == null) prompt = "Quit";
             int input = 0;
             bool isInvalid = true;
 
@@ -30,7 +31,7 @@
                     maxOptions++;
                     Console.WriteLine(maxOptions + ". " + option);
                 }
-                if (withQuit) Console.WriteLine("0. Quit");
+                if (withQuit) Console.WriteLine("0. " + quitMessage);
 
                 Console.WriteLine();
                 bool isParsed = int.TryParse(PromptForInput("Option: ", false), out input);
@@ -419,6 +420,50 @@
             return input;
         }
 
+        public static MathValue PromptForMathValue(string prompt, decimal min, decimal max)
+        {
+            bool isInvalid = true;
+            if (min > max)
+            {
+                throw new ArgumentException("Min (" + min + ") is greater than max (" + max + ") for prompt \"" + prompt + "\"");
+            }
+
+            decimal numerator = 0;
+            decimal denominator = 1;
+            do
+            {
+                string input = PromptForInput(prompt, false);
+                string[] strings = input.Split("/");
+                if (strings.Length > 2)
+                {
+                    Console.WriteLine("Invalid fraction!");
+                    continue;
+                }
+                bool isParsed = (decimal.TryParse(strings[0], out numerator) && (strings.Length == 2 ? decimal.TryParse(strings[1], out denominator) : true));
+
+                if (!isParsed)
+                {
+                    Console.WriteLine("Invalid number!");
+                    continue;
+                }
+                else if (denominator == 0)
+                {
+                    Console.WriteLine("Denominator cannot be 0!");
+                    continue;
+                }
+                else if ((numerator / denominator) < min || (numerator / denominator) > max)
+                {
+                    Console.WriteLine("Input must be between " + min + " and " + max + "!");
+                    continue;
+                }
+
+                isInvalid = false;
+
+            } while (isInvalid);
+
+            return new MathValue(numerator, denominator);
+        }
+
         /// <summary>
         /// Generates a prompt that allows the user to enter any response and returns the string.
         /// When allowEmpty is true, empty responses are valid. When false, responses must contain
@@ -553,6 +598,53 @@
             }
             return matrix;
         }
+        public static List<List<MathValue>> PromptForMathValueMatrix(string prompt, int rowCount = -1, int columnCount = -1)
+        {
+            if (rowCount < 1) rowCount = CalculatorLibrary.IO.PromptForInt("How many rows? ", 1, int.MaxValue);
+            if (columnCount < 1) columnCount = CalculatorLibrary.IO.PromptForInt("How many columns? ", 1, int.MaxValue);
+
+            Console.Clear();
+
+            List<List<MathValue>> matrix = new();
+            int count = 0;
+
+            List<string> matrixText = new();
+
+            for (int i = 0; i < rowCount; i++)
+            {
+                List<MathValue> columns = new();
+                for (int j = 0; j < columnCount; j++)
+                {
+                    Console.WriteLine(prompt);
+                    Console.WriteLine();
+                    foreach (string rowText in matrixText)
+                    {
+                        Console.WriteLine(rowText);
+                    }
+
+                    string promptForNextItem = "Row " + (i + 1) + ":   ";
+                    if (columns.Count > 0)
+                    {
+                        foreach (MathValue item in columns)
+                        {
+                            promptForNextItem += item + ",  ";
+                        }
+                    }
+                    columns.Add(CalculatorLibrary.IO.PromptForMathValue(promptForNextItem, decimal.MinValue, decimal.MaxValue));
+                    Console.Clear();
+                }
+                string row = "Row " + (matrix.Count + 1) + ":   ";
+                foreach (MathValue number in columns)
+                {
+                    row += number + ",  ";
+                }
+                matrixText.Add(row);
+
+                matrix.Add(columns);
+            }
+            return matrix;
+        }
+
 
         public static List<List<string>> PromptForStringMatrix(string prompt, int rowCount = -1, int columnCount = -1)
         {

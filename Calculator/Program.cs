@@ -8,6 +8,7 @@ internal class Program
     private static void Main(string[] args)
     {
         List<List<decimal>> outputMatrix = new();
+        List<List<MathValue>> outputMatrix2 = new();
         do
         {
             try
@@ -24,7 +25,7 @@ internal class Program
                     "Cramer's rule", 
                     "Solve by inverse", 
                     "Compare previous matrix"];
-                int menuselection = IO.PromptForMenuSelection(en, true);
+                int menuselection = IO.PromptForMenuSelection(en, true, "What would you like to do?", "Quit");
 
                 Console.Clear();
                 switch (menuselection)
@@ -99,10 +100,60 @@ internal class Program
 
                             break;
                         }
+                    /*
+                case 4:
+                    {
+                        List<List<decimal>> matrix1 = UseSavedMatrix("What would you like to do for the first matrix?");
+                        List<List<decimal>> matrix2;
+                        int rowCount;
+                        int columnCount;
+                        if (matrix1 == null)
+                        {
+                            rowCount = IO.PromptForInt("How many rows do the matrices have? ", 0, int.MaxValue);
+                            columnCount = IO.PromptForInt("How many columns? ", 0, int.MaxValue);
+
+                            matrix1 = IO.PromptForMatrix("Enter the first matrix: ", rowCount, columnCount);
+                            matrix2 = UseSavedMatrix("What would you like to do for the second matrix?", false, rowCount, columnCount);
+                            if (matrix2 == null)
+                            {
+                                matrix2 = IO.PromptForMatrix("Enter the second matrix: ", rowCount, columnCount);
+                            }
+                        }
+                        else
+                        {
+                            matrix2 = UseSavedMatrix("What would you like to do for the second matrix?", false, matrix1.Count, matrix1[0].Count);
+                            if (matrix2 == null)
+                            {
+                                matrix2 = IO.PromptForMatrix("Enter the second matrix: ", matrix1.Count, matrix1[0].Count);
+                            }
+                        }
+
+                        bool add = IO.PromptForBool("Add or subtract? ", "add", "subtract");
+
+                        Console.WriteLine("Matrix 1: ");
+                        Console.WriteLine();
+                        Matrix.PrintMatrix(ref matrix1);
+                        Console.WriteLine();
+                        Console.WriteLine("Matrix 2: ");
+                        Console.WriteLine();
+                        Matrix.PrintMatrix(ref matrix2);
+                        Console.WriteLine();
+                        Console.WriteLine("Output matrix: ");
+                        Console.WriteLine();
+
+                        outputMatrix = Matrix.AddMatrix(ref matrix1, ref matrix2, !add);
+
+                        Matrix.PrintMatrix(ref outputMatrix);
+                        Console.WriteLine();
+                        DoneWithOperation(ref outputMatrix);
+                        Console.Clear();
+
+                        break;
+                    }*/
                     case 4:
                         {
-                            List<List<decimal>> matrix1 = UseSavedMatrix("What would you like to do for the first matrix?");
-                            List<List<decimal>> matrix2;
+                            List<List<MathValue>> matrix1 = null;
+                            List<List<MathValue>> matrix2 = null;
                             int rowCount;
                             int columnCount;
                             if (matrix1 == null)
@@ -110,19 +161,19 @@ internal class Program
                                 rowCount = IO.PromptForInt("How many rows do the matrices have? ", 0, int.MaxValue);
                                 columnCount = IO.PromptForInt("How many columns? ", 0, int.MaxValue);
 
-                                matrix1 = IO.PromptForMatrix("Enter the first matrix: ", rowCount, columnCount);
-                                matrix2 = UseSavedMatrix("What would you like to do for the second matrix?", false, rowCount, columnCount);
+                                matrix1 = IO.PromptForMathValueMatrix("Enter the first matrix: ", rowCount, columnCount);
+                                //matrix2 = UseSavedMatrix("What would you like to do for the second matrix?", false, rowCount, columnCount);
                                 if (matrix2 == null)
                                 {
-                                    matrix2 = IO.PromptForMatrix("Enter the second matrix: ", rowCount, columnCount);
+                                    matrix2 = IO.PromptForMathValueMatrix("Enter the second matrix: ", rowCount, columnCount);
                                 }
                             }
                             else
                             {
-                                matrix2 = UseSavedMatrix("What would you like to do for the second matrix?", false, matrix1.Count, matrix1[0].Count);
+                                //matrix2 = UseSavedMatrix("What would you like to do for the second matrix?", false, matrix1.Count, matrix1[0].Count);
                                 if (matrix2 == null)
                                 {
-                                    matrix2 = IO.PromptForMatrix("Enter the second matrix: ", matrix1.Count, matrix1[0].Count);
+                                    matrix2 = IO.PromptForMathValueMatrix("Enter the second matrix: ", matrix1.Count, matrix1[0].Count);
                                 }
                             }
 
@@ -139,11 +190,12 @@ internal class Program
                             Console.WriteLine("Output matrix: ");
                             Console.WriteLine();
 
-                            outputMatrix = Matrix.AddMatrix(ref matrix1, ref matrix2, !add);
+                            outputMatrix2 = Matrix.AddMatrix(ref matrix1, ref matrix2, !add);
 
-                            Matrix.PrintMatrix(ref outputMatrix);
+                            Matrix.PrintMatrixDecimal(ref outputMatrix2);
                             Console.WriteLine();
-                            DoneWithOperation(ref outputMatrix);
+                            Console.ReadLine();
+                            //DoneWithOperation(ref outputMatrix2);
                             Console.Clear();
 
                             break;
@@ -340,14 +392,14 @@ internal class Program
                             Console.WriteLine();
                             Console.WriteLine("Input matrix: ");
                             Console.WriteLine();
-                            Matrix.PrintStringMatrix(ref matrix);
+                            Matrix.PrintMatrix(ref matrix);
                             Console.WriteLine();
                             Console.WriteLine("Comparison: ");
                             Console.WriteLine();
 
                             var compare = Matrix.Compare(ref outputMatrix, ref matrix);
 
-                            Matrix.PrintStringMatrix(ref compare);
+                            Matrix.PrintMatrix(ref compare);
                             Console.WriteLine();
                             DoneWithOperation(ref outputMatrix);
                             Console.Clear();
@@ -374,7 +426,6 @@ internal class Program
         Console.Clear();
 
         IEnumerable<string> en2 = [
-            "Cancel",
             "Slot 1 - " + ((savedMatrices[0] == null || savedMatrices[0].Count == 0) ? "Empty" : "Full"),
             "Slot 2 - " + ((savedMatrices[1] == null || savedMatrices[1].Count == 0) ? "Empty" : "Full"),
             "Slot 3 - " + ((savedMatrices[2] == null || savedMatrices[2].Count == 0) ? "Empty" : "Full"),
@@ -387,10 +438,10 @@ internal class Program
             "Slot 10 - " + ((savedMatrices[9] == null || savedMatrices[9].Count == 0) ? "Empty" : "Full")
             ];
 
-        int selectedItem = IO.PromptForMenuSelection(en2, false, "Which save slot?");
+        int selectedItem = IO.PromptForMenuSelection(en2, true, "Which save slot?", "Cancel");
 
-        if (selectedItem == 1) return;
-        else savedMatrices[selectedItem - 2] = outputMatrix;
+        if (selectedItem == 0) return;
+        else savedMatrices[selectedItem - 1] = outputMatrix;
     }
 
 
@@ -418,14 +469,13 @@ internal class Program
         }
 
         IEnumerable<string> pickMatrix = [
-                    "Cancel",
         ];
 
         foreach (int i in validMatrices) pickMatrix = pickMatrix.Append("Save " + (i + 1));
 
-        int chosenValue = IO.PromptForMenuSelection(pickMatrix, false);
-        if (chosenValue == 1) return null;
+        int chosenValue = IO.PromptForMenuSelection(pickMatrix, true, "Which save slot?", "Cancel");
+        if (chosenValue == 0) return null;
         Console.Clear();
-        return savedMatrices[chosenValue - 2];
+        return savedMatrices[chosenValue - 1];
     }
 }
