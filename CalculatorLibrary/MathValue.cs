@@ -165,6 +165,55 @@ namespace CalculatorLibrary
             catch (Exception e) {}
         }
 
+        public void SquareRoot()
+        {
+            Numerator = (decimal) Math.Sqrt((double) Numerator);
+            Denominator = (decimal) Math.Sqrt((double) Denominator);
+            Reduce();
+        }
+
+        public void Sine()
+        {
+            Numerator = (decimal)Math.Sin((double)(Numerator / Denominator) * (Math.PI / 180));
+            Denominator = 1;
+            Reduce();
+        }
+
+        public void Arcsin()
+        {
+            Numerator = (decimal) (Math.Asin((double)(Numerator / Denominator)) * (180 / Math.PI));
+            Denominator = 1;
+            Reduce();
+        }
+
+        public void Cosine()
+        {
+            Numerator = (decimal) Math.Cos((double) (Numerator / Denominator) * (Math.PI / 180));
+            Denominator = 1;
+            Reduce();
+        }
+
+        public void Arccos()
+        {
+            Numerator = (decimal) (Math.Acos((double)(Numerator / Denominator)) * (180 / Math.PI));
+            Denominator = 1;
+            Reduce();
+        }
+
+        public void Tangent()
+        {
+            Numerator = (decimal)Math.Tan((double)(Numerator / Denominator) * (Math.PI / 180));
+            Denominator = 1;
+            Reduce();
+        }
+
+        public void Arctan()
+        {
+            Numerator = (decimal) (Math.Atan((double)(Numerator / Denominator)) * (180 / Math.PI));
+            Denominator = 1;
+            Reduce();
+        }
+
         public override string ToString()
         {
             if (Numerator == 0 || Denominator == 1) return Numerator.ToString();

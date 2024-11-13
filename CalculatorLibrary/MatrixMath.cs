@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CalculatorLibrary
 {
-    public class Matrix
+    public class MatrixMath
     {
         public static decimal GetDeterminant(ref List<List<decimal>> matrix)
         {

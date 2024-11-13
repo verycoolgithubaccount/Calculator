@@ -691,6 +691,11 @@
             return matrix;
         }
 
+        public static List<List<MathValue>> PromptForVector(string prompt, int rowCount = -1)
+        {
+            return PromptForMathValueMatrix(prompt, rowCount, 1);
+        }
+
 
         public static List<List<string>> PromptForStringMatrix(string prompt, int rowCount = -1, int columnCount = -1)
         {

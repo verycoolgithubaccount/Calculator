@@ -1,13 +1,51 @@
 ﻿using CalculatorLibrary;
 using System.Numerics;
+using System.Runtime.Intrinsics;
 
 internal class Program
 {
     private static List<List<MathValue>>[] savedMatrices = new List<List<MathValue>>[10];
+    private static List<List<MathValue>> outputMatrix = new();
 
     private static void Main(string[] args)
     {
-        List<List<MathValue>> outputMatrix = new();
+        
+        do
+        {
+            try
+            {
+                Console.Clear();
+                IEnumerable<string> en = [
+                    "Basic matrix math",
+                    "Basic vector math",
+                    "Matrix transformations"];
+                int menuselection = IO.PromptForMenuSelection(en, true, "MAIN MENU", "Quit");
+
+                Console.Clear();
+                switch (menuselection)
+                {
+                    case 0: return;
+                    case 1:
+                        {
+                            BasicFractionMath();
+                            break;
+                        }
+                    case 2:
+                        {
+                            BasicVectorMath();
+                            break;
+                        }
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
+        } while (true);
+    }
+
+    private static void BasicFractionMath()
+    {
         do
         {
             try
@@ -16,15 +54,15 @@ internal class Program
                 IEnumerable<string> en = [
                     "Get the determinant of a matrix",
                     "Transpose a matrix",
-                    "Multiply a matrix by a scalar", 
-                    "Add two matrices", 
+                    "Multiply a matrix by a scalar",
+                    "Add two matrices",
                     "Multiply two matrices",
                     "Get a matrix's cofactors",
-                    "Get a matrix's inverse", 
-                    "Cramer's rule", 
-                    "Solve by inverse", 
+                    "Get a matrix's inverse",
+                    "Cramer's rule",
+                    "Solve by inverse",
                     "Print a matrix as fractions"];
-                int menuselection = IO.PromptForMenuSelection(en, true, "What would you like to do?", "Quit");
+                int menuselection = IO.PromptForMenuSelection(en, true, "What would you like to do?", "Back");
 
                 Console.Clear();
                 switch (menuselection)
@@ -41,9 +79,9 @@ internal class Program
 
                             Console.WriteLine("Input matrix: ");
                             Console.WriteLine();
-                            Matrix.PrintMatrixDecimal(ref matrix);
+                            MatrixMath.PrintMatrixDecimal(ref matrix);
                             Console.WriteLine();
-                            Console.WriteLine("Determinant: " + Matrix.GetDeterminant(ref matrix));
+                            Console.WriteLine("Determinant: " + MatrixMath.GetDeterminant(ref matrix));
                             Console.WriteLine();
                             Console.WriteLine("Press enter to continue!");
                             Console.ReadLine();
@@ -60,14 +98,14 @@ internal class Program
 
                             Console.WriteLine("Input matrix: ");
                             Console.WriteLine();
-                            Matrix.PrintMatrixDecimal(ref matrix);
+                            MatrixMath.PrintMatrixDecimal(ref matrix);
                             Console.WriteLine();
                             Console.WriteLine("Output matrix: ");
                             Console.WriteLine();
 
-                            outputMatrix = Matrix.Transpose(ref matrix);
+                            outputMatrix = MatrixMath.Transpose(ref matrix);
 
-                            Matrix.PrintMatrixDecimal(ref outputMatrix);
+                            MatrixMath.PrintMatrixDecimal(ref outputMatrix);
                             Console.WriteLine();
                             DoneWithOperation(ref outputMatrix);
                             Console.Clear();
@@ -85,14 +123,14 @@ internal class Program
 
                             Console.WriteLine("Input matrix: ");
                             Console.WriteLine();
-                            Matrix.PrintMatrixDecimal(ref matrix);
+                            MatrixMath.PrintMatrixDecimal(ref matrix);
                             Console.WriteLine();
                             Console.WriteLine("Output matrix: ");
                             Console.WriteLine();
 
-                            outputMatrix = Matrix.ScalarMultiply(ref matrix, scalar);
+                            outputMatrix = MatrixMath.ScalarMultiply(ref matrix, scalar);
 
-                            Matrix.PrintMatrixDecimal(ref outputMatrix);
+                            MatrixMath.PrintMatrixDecimal(ref outputMatrix);
                             Console.WriteLine();
                             DoneWithOperation(ref outputMatrix);
                             Console.Clear();
@@ -130,18 +168,18 @@ internal class Program
 
                             Console.WriteLine("Matrix 1: ");
                             Console.WriteLine();
-                            Matrix.PrintMatrixDecimal(ref matrix1);
+                            MatrixMath.PrintMatrixDecimal(ref matrix1);
                             Console.WriteLine();
                             Console.WriteLine("Matrix 2: ");
                             Console.WriteLine();
-                            Matrix.PrintMatrixDecimal(ref matrix2);
+                            MatrixMath.PrintMatrixDecimal(ref matrix2);
                             Console.WriteLine();
                             Console.WriteLine("Output matrix: ");
                             Console.WriteLine();
 
-                            outputMatrix = Matrix.AddMatrix(ref matrix1, ref matrix2, !add);
+                            outputMatrix = MatrixMath.AddMatrix(ref matrix1, ref matrix2, !add);
 
-                            Matrix.PrintMatrixDecimal(ref outputMatrix);
+                            MatrixMath.PrintMatrixDecimal(ref outputMatrix);
                             Console.WriteLine();
                             DoneWithOperation(ref outputMatrix);
                             Console.Clear();
@@ -180,18 +218,18 @@ internal class Program
 
                             Console.WriteLine("Matrix 1: ");
                             Console.WriteLine();
-                            Matrix.PrintMatrixDecimal(ref matrix1);
+                            MatrixMath.PrintMatrixDecimal(ref matrix1);
                             Console.WriteLine();
                             Console.WriteLine("Matrix 2: ");
                             Console.WriteLine();
-                            Matrix.PrintMatrixDecimal(ref matrix2);
+                            MatrixMath.PrintMatrixDecimal(ref matrix2);
                             Console.WriteLine();
                             Console.WriteLine("Output matrix: ");
                             Console.WriteLine();
 
-                            outputMatrix = Matrix.MultiplyMatrix(ref matrix1, ref matrix2);
+                            outputMatrix = MatrixMath.MultiplyMatrix(ref matrix1, ref matrix2);
 
-                            Matrix.PrintMatrixDecimal(ref outputMatrix);
+                            MatrixMath.PrintMatrixDecimal(ref outputMatrix);
                             Console.WriteLine();
                             DoneWithOperation(ref outputMatrix);
                             Console.Clear();
@@ -209,16 +247,16 @@ internal class Program
 
                             Console.WriteLine("Input matrix: ");
                             Console.WriteLine();
-                            Matrix.PrintMatrixDecimal(ref matrix);
+                            MatrixMath.PrintMatrixDecimal(ref matrix);
                             Console.WriteLine();
-                            Console.WriteLine("Determinant: " + Matrix.GetDeterminant(ref matrix));
+                            Console.WriteLine("Determinant: " + MatrixMath.GetDeterminant(ref matrix));
                             Console.WriteLine();
                             Console.WriteLine("Matrix of Cofactors: ");
                             Console.WriteLine();
 
-                            outputMatrix = Matrix.MatrixOfCofactors(ref matrix);
+                            outputMatrix = MatrixMath.MatrixOfCofactors(ref matrix);
 
-                            Matrix.PrintMatrixDecimal(ref outputMatrix);
+                            MatrixMath.PrintMatrixDecimal(ref outputMatrix);
                             Console.WriteLine();
                             DoneWithOperation(ref outputMatrix);
                             Console.Clear();
@@ -236,23 +274,23 @@ internal class Program
 
                             Console.WriteLine("Input matrix: ");
                             Console.WriteLine();
-                            Matrix.PrintMatrixDecimal(ref matrix);
+                            MatrixMath.PrintMatrixDecimal(ref matrix);
                             Console.WriteLine();
-                            Console.WriteLine("Determinant: " + Matrix.GetDeterminant(ref matrix));
+                            Console.WriteLine("Determinant: " + MatrixMath.GetDeterminant(ref matrix));
                             Console.WriteLine();
                             Console.WriteLine("Matrix of Cofactors: ");
                             Console.WriteLine();
 
-                            var cof = Matrix.MatrixOfCofactors(ref matrix);
+                            var cof = MatrixMath.MatrixOfCofactors(ref matrix);
 
-                            Matrix.PrintMatrixDecimal(ref cof);
+                            MatrixMath.PrintMatrixDecimal(ref cof);
                             Console.WriteLine();
                             Console.WriteLine("Inverse: ");
                             Console.WriteLine();
 
-                            outputMatrix = Matrix.Inverse(ref matrix);
+                            outputMatrix = MatrixMath.Inverse(ref matrix);
 
-                            Matrix.PrintMatrixDecimal(ref outputMatrix);
+                            MatrixMath.PrintMatrixDecimal(ref outputMatrix);
                             Console.WriteLine();
                             DoneWithOperation(ref outputMatrix);
                             Console.Clear();
@@ -268,18 +306,18 @@ internal class Program
 
                             Console.WriteLine("Input matrix: ");
                             Console.WriteLine();
-                            Matrix.PrintMatrixDecimal(ref matrix);
+                            MatrixMath.PrintMatrixDecimal(ref matrix);
                             Console.WriteLine();
                             Console.WriteLine("Solution matrix: ");
                             Console.WriteLine();
-                            Matrix.PrintMatrixDecimal(ref solutions);
+                            MatrixMath.PrintMatrixDecimal(ref solutions);
                             Console.WriteLine();
                             Console.WriteLine("Variable matrix: ");
                             Console.WriteLine();
 
-                            outputMatrix = Matrix.Cramer(ref matrix, ref solutions);
+                            outputMatrix = MatrixMath.Cramer(ref matrix, ref solutions);
 
-                            Matrix.PrintMatrixDecimal(ref outputMatrix);
+                            MatrixMath.PrintMatrixDecimal(ref outputMatrix);
                             Console.WriteLine();
                             DoneWithOperation(ref outputMatrix);
                             Console.Clear();
@@ -295,34 +333,34 @@ internal class Program
 
                             Console.WriteLine("Input matrix: ");
                             Console.WriteLine();
-                            Matrix.PrintMatrixDecimal(ref matrix);
+                            MatrixMath.PrintMatrixDecimal(ref matrix);
                             Console.WriteLine();
-                            Console.WriteLine("Determinant: " + Matrix.GetDeterminant(ref matrix));
+                            Console.WriteLine("Determinant: " + MatrixMath.GetDeterminant(ref matrix));
                             Console.WriteLine();
                             Console.WriteLine("Matrix of Cofactors: ");
                             Console.WriteLine();
 
-                            var cof = Matrix.MatrixOfCofactors(ref matrix);
+                            var cof = MatrixMath.MatrixOfCofactors(ref matrix);
 
-                            Matrix.PrintMatrixDecimal(ref cof);
+                            MatrixMath.PrintMatrixDecimal(ref cof);
                             Console.WriteLine();
                             Console.WriteLine("Inverse: ");
                             Console.WriteLine();
 
-                            var inverseMatrix = Matrix.Inverse(ref matrix);
+                            var inverseMatrix = MatrixMath.Inverse(ref matrix);
 
-                            Matrix.PrintMatrixDecimal(ref inverseMatrix);
+                            MatrixMath.PrintMatrixDecimal(ref inverseMatrix);
                             Console.WriteLine();
                             Console.WriteLine("Solution matrix: ");
                             Console.WriteLine();
-                            Matrix.PrintMatrix(ref solutions);
+                            MatrixMath.PrintMatrix(ref solutions);
                             Console.WriteLine();
                             Console.WriteLine("Variable matrix: ");
                             Console.WriteLine();
 
-                            outputMatrix = Matrix.MultiplyMatrix(ref inverseMatrix, ref solutions);
+                            outputMatrix = MatrixMath.MultiplyMatrix(ref inverseMatrix, ref solutions);
 
-                            Matrix.PrintMatrix(ref outputMatrix);
+                            MatrixMath.PrintMatrix(ref outputMatrix);
                             Console.WriteLine();
                             DoneWithOperation(ref outputMatrix);
                             Console.Clear();
@@ -338,7 +376,7 @@ internal class Program
                             {
                                 if (savedMatrices[i] != null && savedMatrices[i].Count != 0) validMatrices.Add(i);
                             }
-                            
+
                             if (validMatrices.Count() != 0 && outputMatrix.Count >= 1)
                             {
                                 IEnumerable<string> choices = ["Input a new matrix"];
@@ -367,7 +405,7 @@ internal class Program
 
                                     int chosenValue = IO.PromptForMenuSelection(pickMatrix, false, "Which save slot?");
                                     Console.Clear();
-                                    inputMatrix =  savedMatrices[chosenValue - 1];
+                                    inputMatrix = savedMatrices[chosenValue - 1];
                                 }
                             }
                             else
@@ -377,14 +415,166 @@ internal class Program
 
                             Console.WriteLine("Input matrix: ");
                             Console.WriteLine();
-                            Matrix.PrintMatrixDecimal(ref inputMatrix);
+                            MatrixMath.PrintMatrixDecimal(ref inputMatrix);
                             Console.WriteLine();
                             Console.WriteLine("Fraction matrix: ");
                             Console.WriteLine();
-                            Matrix.PrintMatrix(ref inputMatrix);
+                            MatrixMath.PrintMatrix(ref inputMatrix);
                             Console.WriteLine();
                             Console.WriteLine("Press enter to continue!");
                             Console.ReadLine();
+                            break;
+                        }
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
+        } while (true);
+    }
+
+    private static void BasicVectorMath()
+    {
+        do
+        {
+            try
+            {
+                Console.Clear();
+                IEnumerable<string> en = [
+                    "Get a vector's magnitude",
+                    "Convert to a unit vector",
+                    "Get the dot product of 2 vectors",
+                    "Get the angle between 2 vectors in degrees"];
+                int menuselection = IO.PromptForMenuSelection(en, true, "What would you like to do?", "Back");
+
+                Console.Clear();
+                switch (menuselection)
+                {
+                    case 0: return;
+                    case 1:
+                        {
+                            List<List<MathValue>> vector = UseSavedMatrix(null, false, -1, 1);
+                            if (vector == null)
+                            {
+                                int size = IO.PromptForInt("What is the dimension of the vector? ", 0, int.MaxValue);
+                                vector = IO.PromptForVector("Enter the vector: ", size);
+                            }
+
+                            Console.WriteLine("Input vector: ");
+                            Console.WriteLine();
+                            MatrixMath.PrintMatrixDecimal(ref vector);
+                            Console.WriteLine();
+                            Console.WriteLine("Magnitude: " + VectorMath.GetMagnitude(ref vector));
+                            Console.WriteLine();
+                            Console.WriteLine("Press enter to continue!");
+                            Console.ReadLine();
+
+                            break;
+                        }
+                    case 2:
+                        {
+                            List<List<MathValue>> vector = UseSavedMatrix(null, false, -1, 1);
+                            if (vector == null)
+                            {
+                                int size = IO.PromptForInt("What is the dimension of the vector? ", 0, int.MaxValue);
+                                vector = IO.PromptForVector("Enter the vector: ", size);
+                            }
+
+                            Console.WriteLine("Input vector: ");
+                            Console.WriteLine();
+                            MatrixMath.PrintMatrixDecimal(ref vector);
+                            Console.WriteLine();
+                            Console.WriteLine("Unit vector: ");
+                            Console.WriteLine();
+
+                            outputMatrix = VectorMath.GetUnitVector(ref vector);
+
+                            MatrixMath.PrintMatrixDecimal(ref outputMatrix);
+                            Console.WriteLine();
+                            DoneWithOperation(ref outputMatrix);
+                            Console.Clear();
+
+                            break;
+                        }
+                    case 3:
+                        {
+                            List<List<MathValue>> vector1 = UseSavedMatrix("What would you like to do for the first vector?");
+                            List<List<MathValue>> vector2;
+                            int rowCount;
+                            if (vector1 == null)
+                            {
+                                rowCount = IO.PromptForInt("What are the dimensions of the vectors? ", 0, int.MaxValue);
+
+                                vector1 = IO.PromptForVector("Enter the first vector: ", rowCount);
+                                vector2 = UseSavedMatrix("What would you like to do for the second vector?", false, rowCount);
+                                if (vector2 == null)
+                                {
+                                    vector2 = IO.PromptForVector("Enter the second vector: ", rowCount);
+                                }
+                            }
+                            else
+                            {
+                                vector2 = UseSavedMatrix("What would you like to do for the second vector?", false, vector1.Count);
+                                if (vector2 == null)
+                                {
+                                    vector2 = IO.PromptForVector("Enter the second vector: ", vector1.Count);
+                                }
+                            }
+
+                            Console.WriteLine("Vector 1: ");
+                            Console.WriteLine();
+                            MatrixMath.PrintMatrixDecimal(ref vector1);
+                            Console.WriteLine();
+                            Console.WriteLine("Vector 2: ");
+                            Console.WriteLine();
+                            MatrixMath.PrintMatrixDecimal(ref vector2);
+                            Console.WriteLine();
+                            Console.WriteLine("Dot product: " + VectorMath.DotProduct(ref vector1, ref vector2));
+                            Console.WriteLine();
+                            Console.WriteLine("Press enter to continue!");
+                            Console.ReadLine();
+
+                            break;
+                        }
+                    case 4:
+                        {
+                            List<List<MathValue>> vector1 = UseSavedMatrix("What would you like to do for the first vector?");
+                            List<List<MathValue>> vector2;
+                            int rowCount;
+                            if (vector1 == null)
+                            {
+                                rowCount = IO.PromptForInt("What are the dimensions of the vectors? ", 0, int.MaxValue);
+
+                                vector1 = IO.PromptForVector("Enter the first vector: ", rowCount);
+                                vector2 = UseSavedMatrix("What would you like to do for the second vector?", false, rowCount);
+                                if (vector2 == null)
+                                {
+                                    vector2 = IO.PromptForVector("Enter the second vector: ", rowCount);
+                                }
+                            }
+                            else
+                            {
+                                vector2 = UseSavedMatrix("What would you like to do for the second vector?", false, vector1.Count);
+                                if (vector2 == null)
+                                {
+                                    vector2 = IO.PromptForVector("Enter the second vector: ", vector1.Count);
+                                }
+                            }
+
+                            Console.WriteLine("Vector 1: ");
+                            Console.WriteLine();
+                            MatrixMath.PrintMatrixDecimal(ref vector1);
+                            Console.WriteLine();
+                            Console.WriteLine("Vector 2: ");
+                            Console.WriteLine();
+                            MatrixMath.PrintMatrixDecimal(ref vector2);
+                            Console.WriteLine();
+                            Console.WriteLine("Angle: " + VectorMath.GetAngleBetweenVectors(ref vector1, ref vector2) + "°");
+                            Console.WriteLine();
+                            Console.WriteLine("Press enter to continue!");
+                            Console.ReadLine();
+
                             break;
                         }
                 }
