@@ -445,7 +445,8 @@ internal class Program
                     "Get a vector's magnitude",
                     "Convert to a unit vector",
                     "Get the dot product of 2 vectors",
-                    "Get the angle between 2 vectors in degrees"];
+                    "Get the angle between 2 vectors in degrees",
+                    "Get the cross product of 2 vectors"];
                 int menuselection = IO.PromptForMenuSelection(en, true, "What would you like to do?", "Back");
 
                 Console.Clear();
@@ -499,7 +500,7 @@ internal class Program
                         }
                     case 3:
                         {
-                            List<List<MathValue>> vector1 = UseSavedMatrix("What would you like to do for the first vector?");
+                            List<List<MathValue>> vector1 = UseSavedMatrix("What would you like to do for the first vector?", false, -1, 1);
                             List<List<MathValue>> vector2;
                             int rowCount;
                             if (vector1 == null)
@@ -507,7 +508,7 @@ internal class Program
                                 rowCount = IO.PromptForInt("What are the dimensions of the vectors? ", 0, int.MaxValue);
 
                                 vector1 = IO.PromptForVector("Enter the first vector: ", rowCount);
-                                vector2 = UseSavedMatrix("What would you like to do for the second vector?", false, rowCount);
+                                vector2 = UseSavedMatrix("What would you like to do for the second vector?", false, rowCount, 1);
                                 if (vector2 == null)
                                 {
                                     vector2 = IO.PromptForVector("Enter the second vector: ", rowCount);
@@ -515,7 +516,7 @@ internal class Program
                             }
                             else
                             {
-                                vector2 = UseSavedMatrix("What would you like to do for the second vector?", false, vector1.Count);
+                                vector2 = UseSavedMatrix("What would you like to do for the second vector?", false, vector1.Count, 1);
                                 if (vector2 == null)
                                 {
                                     vector2 = IO.PromptForVector("Enter the second vector: ", vector1.Count);
@@ -539,7 +540,7 @@ internal class Program
                         }
                     case 4:
                         {
-                            List<List<MathValue>> vector1 = UseSavedMatrix("What would you like to do for the first vector?");
+                            List<List<MathValue>> vector1 = UseSavedMatrix("What would you like to do for the first vector?", false, -1, 1);
                             List<List<MathValue>> vector2;
                             int rowCount;
                             if (vector1 == null)
@@ -547,7 +548,7 @@ internal class Program
                                 rowCount = IO.PromptForInt("What are the dimensions of the vectors? ", 0, int.MaxValue);
 
                                 vector1 = IO.PromptForVector("Enter the first vector: ", rowCount);
-                                vector2 = UseSavedMatrix("What would you like to do for the second vector?", false, rowCount);
+                                vector2 = UseSavedMatrix("What would you like to do for the second vector?", false, rowCount, 1);
                                 if (vector2 == null)
                                 {
                                     vector2 = IO.PromptForVector("Enter the second vector: ", rowCount);
@@ -555,7 +556,7 @@ internal class Program
                             }
                             else
                             {
-                                vector2 = UseSavedMatrix("What would you like to do for the second vector?", false, vector1.Count);
+                                vector2 = UseSavedMatrix("What would you like to do for the second vector?", false, vector1.Count, 1);
                                 if (vector2 == null)
                                 {
                                     vector2 = IO.PromptForVector("Enter the second vector: ", vector1.Count);
@@ -575,6 +576,47 @@ internal class Program
                             Console.WriteLine("Press enter to continue!");
                             Console.ReadLine();
 
+                            break;
+                        }
+                    case 5:
+                        {
+                            List<List<MathValue>> vector1 = UseSavedMatrix("What would you like to do for the first vector?", false, 3, 1);
+                            List<List<MathValue>> vector2;
+                            if (vector1 == null)
+                            {
+                                vector1 = IO.PromptForVector("Enter the first vector: ", 3);
+                                vector2 = UseSavedMatrix("What would you like to do for the second vector?", false, 3, 1);
+                                if (vector2 == null)
+                                {
+                                    vector2 = IO.PromptForVector("Enter the second vector: ", 3);
+                                }
+                            }
+                            else
+                            {
+                                vector2 = UseSavedMatrix("What would you like to do for the second vector?", false, 3, 1);
+                                if (vector2 == null)
+                                {
+                                    vector2 = IO.PromptForVector("Enter the second vector: ", 3);
+                                }
+                            }
+
+                            Console.WriteLine("Vector 1: ");
+                            Console.WriteLine();
+                            MatrixMath.PrintMatrixDecimal(ref vector1);
+                            Console.WriteLine();
+                            Console.WriteLine("Vector 2: ");
+                            Console.WriteLine();
+                            MatrixMath.PrintMatrixDecimal(ref vector2);
+                            Console.WriteLine();
+                            Console.WriteLine("Cross product: ");
+                            Console.WriteLine();
+
+                            outputMatrix = VectorMath.CrossProduct(ref vector1, ref vector2);
+
+                            MatrixMath.PrintMatrixDecimal(ref outputMatrix);
+                            Console.WriteLine();
+                            DoneWithOperation(ref outputMatrix);
+                            Console.Clear();
                             break;
                         }
                 }

@@ -468,32 +468,32 @@
 
                 if (strings[0].Contains("sin"))
                 {
-                    numerator = (decimal)Math.Sin((double)((numerator / denominator) * (strings[0].StartsWith("-") ? -1 : 1) * (decimal)(Math.PI / 180)));
+                    numerator = (decimal)Math.Sin((double)((numerator / denominator) * (decimal)(Math.PI / 180)));
                     denominator = 1;
                 }
                 else if (strings[0].Contains("cos"))
                 {
-                    numerator = (decimal)Math.Cos((double)((numerator / denominator) * (strings[0].StartsWith("-") ? -1 : 1) * (decimal)(Math.PI / 180)));
+                    numerator = (decimal)Math.Cos((double)((numerator / denominator) * (decimal)(Math.PI / 180)));
                     denominator = 1;
                 }
                 else if (strings[0].Contains("tan"))
                 {
-                    numerator = (decimal)Math.Tan((double)((numerator / denominator) * (strings[0].StartsWith("-") ? -1 : 1) * (decimal)(Math.PI / 180)));
+                    numerator = (decimal)Math.Tan((double)((numerator / denominator) * (decimal)(Math.PI / 180)));
                     denominator = 1;
                 }
                 else if (strings[0].Contains("sec"))
                 {
-                    numerator = 1 / ((decimal)Math.Cos((double)((numerator / denominator) * (strings[0].StartsWith("-") ? -1 : 1) * (decimal)(Math.PI / 180))));
+                    numerator = 1 / ((decimal)Math.Cos((double)((numerator / denominator) * (decimal)(Math.PI / 180))));
                     denominator = 1;
                 }
                 else if (strings[0].Contains("cos"))
                 {
-                    numerator = 1 / ((decimal)Math.Sin((double)((numerator / denominator) * (strings[0].StartsWith("-") ? -1 : 1) * (decimal)(Math.PI / 180))));
+                    numerator = 1 / ((decimal)Math.Sin((double)((numerator / denominator) * (decimal)(Math.PI / 180))));
                     denominator = 1;
                 }
                 else if (strings[0].Contains("cot"))
                 {
-                    numerator = 1 / ((decimal)Math.Tan((double) ((numerator / denominator) * (strings[0].StartsWith("-") ? -1 : 1) * (decimal)(Math.PI / 180))));
+                    numerator = 1 / ((decimal)Math.Tan((double) ((numerator / denominator) * (decimal)(Math.PI / 180))));
                     denominator = 1;
                 }
 
