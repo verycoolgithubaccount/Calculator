@@ -35,6 +35,11 @@ internal class Program
                             BasicVectorMath();
                             break;
                         }
+                    case 3:
+                        {
+                            MatrixTransformationGeneration();
+                            break;
+                        }
                 }
             }
             catch (ArgumentException ex)
@@ -617,6 +622,55 @@ internal class Program
                             Console.WriteLine();
                             DoneWithOperation(ref outputMatrix);
                             Console.Clear();
+                            break;
+                        }
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
+        } while (true);
+    }
+
+    private static void MatrixTransformationGeneration()
+    {
+        do
+        {
+            try
+            {
+                Console.Clear();
+                IEnumerable<string> en = [
+                    "Add dimensions to a matrix"];
+                int menuselection = IO.PromptForMenuSelection(en, true, "What would you like to do?", "Back");
+
+                Console.Clear();
+                switch (menuselection)
+                {
+                    case 0: return;
+                    case 1:
+                        {
+                            List<List<MathValue>> matrix = UseSavedMatrix();
+                            if (matrix == null)
+                            {
+                                matrix = IO.PromptForMathValueMatrix("Enter the matrix: ");
+                            }
+                            int dimensions = IO.PromptForInt("How many dimensions would you like to add? ", 1, int.MaxValue);
+
+                            Console.WriteLine("Input matrix: ");
+                            Console.WriteLine();
+                            MatrixMath.PrintMatrixDecimal(ref matrix);
+                            Console.WriteLine();
+                            Console.WriteLine("Output matrix: ");
+                            Console.WriteLine();
+
+                            outputMatrix = MatrixTransformations.AddDimensions(ref matrix, dimensions);
+
+                            MatrixMath.PrintMatrixDecimal(ref outputMatrix);
+                            Console.WriteLine();
+                            DoneWithOperation(ref outputMatrix);
+                            Console.Clear();
+
                             break;
                         }
                 }
