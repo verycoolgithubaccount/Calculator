@@ -510,6 +510,7 @@
             return new MathValue(numerator, denominator);
         }
 
+
         /// <summary>
         /// Generates a prompt that allows the user to enter any response and returns the string.
         /// When allowEmpty is true, empty responses are valid. When false, responses must contain
